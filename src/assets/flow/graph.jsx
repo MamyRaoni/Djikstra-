@@ -1,198 +1,186 @@
 import ReactFlow, { addEdge, Controls, Background, useNodesState, useEdgesState, updateEdge } from 'reactflow';
-import { Button, Table } from "antd";
+import { Button } from "antd";
 import {StepBackwardOutlined , StepForwardOutlined} from "@ant-design/icons";
 import 'reactflow/dist/style.css';
 import { useState, useCallback, useRef } from 'react';
 
 const alphabet = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i)); // ['A', 'B', 'C', ..., 'Z']
 
-const initialNodes = [
-    // {
-    //   id:"1",
-    //   data:{
-    //     label:"A",
-    //   },
-    //   position:{
-    //     x:-300,
-    //     y:0
-    //   },
-    //   sourcePosition:"right",
-    //   targetPosition: "left",
-    //   style: { color: 'black', borderRadius: '200px', padding: '10px', width: "35px" },
-    // },
-    // {
-    //   id:"2",
-    //   data:{
-    //     label:"B",
-    //   },
-    //   position:{
-    //     x:-200,
-    //     y:-60
-    //   },
-    //   sourcePosition:"right",
-    //   targetPosition: "left",
-    //   style: { color: 'black', borderRadius: '200px', padding: '10px', width: "35px" },
-    // },
-    // {
-    //   id:"3",
-    //   data:{
-    //     label:"C",
-    //   },
-    //   position:{
-    //     x:-120,
-    //     y:0
-    //   },
-    //   sourcePosition:"right",
-    //   targetPosition: "left",
-    //   style: { color: 'black', borderRadius: '200px', padding: '10px', width: "35px" },
-    // },
-    // {
-    //   id:"4",
-    //   data:{
-    //     label:"D",
-    //   },
-    //   position:{
-    //     x:-200,
-    //     y:60
-    //   },
-    //   sourcePosition:"right",
-    //   targetPosition: "left",
-    //   style: { color: 'black', borderRadius: '200px', padding: '10px', width: "35px" },
-    // },
-    // {
-    //   id:"5",
-    //   data:{
-    //     label:"E",
-    //   },
-    //   position:{
-    //     x:-40,
-    //     y:-60
-    //   },
-    //   sourcePosition:"right",
-    //   targetPosition: "left",
-    //   style: { color: 'black', borderRadius: '200px', padding: '10px', width: "35px" },
-    // },
-    // {
-    //   id:"6",
-    //   data:{
-    //     label:"F",
-    //   },
-    //   position:{
-    //     x:-40,
-    //     y:60
-    //   },
-    //   sourcePosition:"right",
-    //   targetPosition: "left",
-    //   style: { color: 'black', borderRadius: '200px', padding: '10px', width: "35px" },
-    // },
-    // {
-    //   id:"7",
-    //   data:{
-    //     label:"G",
-    //   },
-    //   position:{
-    //     x:100,
-    //     y:0
-    //   },
-    //   sourcePosition:"right",
-    //   targetPosition: "left",
-    //   style: { color: 'black', borderRadius: '200px', padding: '10px', width: "35px" },
-    // },
-  
-  ];
+const initialNodes = 
+  [
+    {
+      id:"1",
+      data:{
+        label:"A",
+      },
+      position:{
+        x:-300,
+        y:0
+      },
+      sourcePosition:"right",
+      targetPosition: "left",
+      style: { color: 'black', borderRadius: '200px', padding: '10px', width: "35px" },
+    },
+    {
+      id:"2",
+      data:{
+        label:"B",
+      },
+      position:{
+        x:-200,
+        y:-60
+      },
+      sourcePosition:"right",
+      targetPosition: "left",
+      style: { color: 'black', borderRadius: '200px', padding: '10px', width: "35px" },
+    },
+    {
+      id:"3",
+      data:{
+        label:"C",
+      },
+      position:{
+        x:-120,
+        y:0
+      },
+      sourcePosition:"right",
+      targetPosition: "left",
+      style: { color: 'black', borderRadius: '200px', padding: '10px', width: "35px" },
+    },
+    {
+      id:"4",
+      data:{
+        label:"D",
+      },
+      position:{
+        x:-200,
+        y:60
+      },
+      sourcePosition:"right",
+      targetPosition: "left",
+      style: { color: 'black', borderRadius: '200px', padding: '10px', width: "35px" },
+    },
+    {
+      id:"5",
+      data:{
+        label:"E",
+      },
+      position:{
+        x:-40,
+        y:-60
+      },
+      sourcePosition:"right",
+      targetPosition: "left",
+      style: { color: 'black', borderRadius: '200px', padding: '10px', width: "35px" },
+    },
+    {
+      id:"6",
+      data:{
+        label:"F",
+      },
+      position:{
+        x:-40,
+        y:60
+      },
+      sourcePosition:"right",
+      targetPosition: "left",
+      style: { color: 'black', borderRadius: '200px', padding: '10px', width: "35px" },
+    },
+    {
+      id:"7",
+      data:{
+        label:"G",
+      },
+      position:{
+        x:100,
+        y:0
+      },
+      sourcePosition:"right",
+      targetPosition: "left",
+      style: { color: 'black', borderRadius: '200px', padding: '10px', width: "35px" },
+    },
+]
+;
 
   const initialEdges = [
-    // {
-    //   id:"1",
-    //   source:"1",
-    //   target:"2",
-    //   label:"2",
-  
-    // },
-    // {
-    //   id:"2",
-    //   source:"1",
-    //   target:"3",
-    //   label:"1",
-  
-    // },
-    // {
-    //   id:"3",
-    //   source:"1",
-    //   target:"4",
-    //   label:"4",
-  
-    // },
-    // {
-    //   id:"4",
-    //   source:"2",
-    //   target:"5",
-    //   label:"1",
-  
-    // },
-    // {
-    //   id:"5",
-    //   source:"2",
-    //   target:"3",
-    //   label:"2",
-  
-    // },
-    // {
-    //   id:"6",
-    //   source:"2",
-    //   target:"4",
-    //   label:"3",
-  
-    // },
-    // {
-    //   id:"7",
-    //   source:"3",
-    //   target:"4",
-    //   label:"3",
-  
-    // },
-    // {
-    //   id:"8",
-    //   source:"3",
-    //   target:"6",
-    //   label:"5",
-  
-    // },
-    // {
-    //   id:"9",
-    //   source:"4",
-    //   target:"6",
-    //   label:"1",
-  
-    // },
-    // {
-    //   id:"10",
-    //   source:"4",
-    //   target:"5",
-    //   label:"3",
-  
-    // },
-    // {
-    //   id:"11",
-    //   source:"5",
-    //   target:"6",
-    //   label:"6",
-  
-    // },
-    // {
-    //   id:"12",
-    //   source:"5",
-    //   target:"7",
-    //   label:"5",
-  
-    // },
-    // {
-    //   id:"13",
-    //   source:"6",
-    //   target:"7",
-    //   label:"2",
-  
-    // },
+    {
+      id:"1",
+      source:"1",
+      target:"2",
+      label:"2",
+    },
+    {
+      id:"2",
+      source:"1",
+      target:"3",
+      label:"1",
+    },
+    {
+      id:"3",
+      source:"1",
+      target:"4",
+      label:"4",
+    },
+    {
+      id:"4",
+      source:"2",
+      target:"5",
+      label:"1",
+    },
+    {
+      id:"5",
+      source:"2",
+      target:"3",
+      label:"2",
+    },
+    {
+      id:"6",
+      source:"2",
+      target:"4",
+      label:"3",
+    },
+    {
+      id:"7",
+      source:"3",
+      target:"4",
+      label:"3",
+    },
+    {
+      id:"8",
+      source:"3",
+      target:"6",
+      label:"5",
+    },
+    {
+      id:"9",
+      source:"4",
+      target:"6",
+      label:"1",
+    },
+    {
+      id:"10",
+      source:"4",
+      target:"5",
+      label:"3",
+    },
+    {
+      id:"11",
+      source:"5",
+      target:"6",
+      label:"6",
+    },
+    {
+      id:"12",
+      source:"5",
+      target:"7",
+      label:"5",
+    },
+    {
+      id:"13",
+      source:"6",
+      target:"7",
+      label:"2",
+    },
   ];
   
 
@@ -768,52 +756,6 @@ setEdges(updatedEdges);
 };
 
 
-const columns = [
-  {
-    title: 'A',
-    dataIndex: 'distance',
-    key: "node",
-  },
-  {
-    title: 'B',
-    dataIndex: 'distance',
-    key: "node",
-  },
-  {
-    title: 'C',
-    dataIndex: 'distance',
-    key: "node",
-  },
-  {
-    title: 'D',
-    dataIndex: 'distance',
-    key: "node",
-  },
-  {
-    title: 'E',
-    dataIndex: 'distance',
-    key: "node",
-  },  
-  {
-    title: 'F',
-    dataIndex: 'distance',
-    key: "node",
-  },
-];
-
-// const row=[
-//   {
-//     title: 'Node',
-//     dataIndex: 'node',
-//     key: 'node',
-//   },
-//   {
-//     title: 'Distance',
-//     dataIndex: 'distance',
-//     key: 'distance',
-//   },
-// ];
-
 const [isShort,setIsShort] = useState(true);
 
 const handleShortestPathClick = () => {
@@ -824,38 +766,49 @@ const handleShortestPathClick = () => {
     setIsShort(false); // Met à jour isShort à false lorsque le bouton "chemin le plus long" est cliqué
   };
 
+  let initialStep;
+
+  isShort ?( initialStep = nodes.map(node => ({
+    node: node.data.label,
+    distance: node.data.label === 'A' ? 0 : '\u221E',
+  }))):(initialStep = nodes.map(node => ({
+    node: node.data.label,
+    distance: node.data.label === 'A' ? 0 : '-\u221E',
+  })))
+  
 
 
 return (
-  <div style={{ height: '100%' }}>
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onEdgeDoubleClick={onEdgeDoubleClick}
-      snapToGrid
-      onEdgeUpdate={onEdgeUpdate}
-      onEdgeUpdateStart={onEdgeUpdateStart}
-      onEdgeUpdateEnd={onEdgeUpdateEnd}
-      onConnect={onConnect}
-      fitView
+  
+<div style={{ height: '100%' }}>
+<ReactFlow
+  nodes={nodes}
+  edges={edges}
+  onNodesChange={onNodesChange}
+  onEdgesChange={onEdgesChange}
+  onEdgeDoubleClick={onEdgeDoubleClick}
+  snapToGrid
+  onEdgeUpdate={onEdgeUpdate}
+  onEdgeUpdateStart={onEdgeUpdateStart}
+  onEdgeUpdateEnd={onEdgeUpdateEnd}
+  onConnect={onConnect}
+  fitView
+>
+  <Background variant='lines' />
+  <Controls>
+    <button
+      onClick={createNode}
+      style={{ background: 'skyblue', border: 'none', padding: "10px" }}
     >
-      <Background variant='lines' />
-      <Controls>
-        <button
-          onClick={createNode}
-          style={{ background: 'skyblue', border: 'none', padding: "10px" }}
-        >
-          C
-        </button>
-      </Controls>
-    </ReactFlow>
+      C
+    </button>
+  </Controls>
+</ReactFlow>
 
-    <div style={{marginTop:"10px"}}>
-        <Button style={{ marginRight:"10px"}} onClick={handleShortestPathClick}>chemin le plus court</Button>
-        <Button onClick={handleLongestPathClick}>chemin le plus long</Button>
-    </div>
+<div style={{marginTop:"10px"}}>
+    <Button style={{ marginRight:"10px"}} onClick={handleShortestPathClick}>chemin le plus court</Button>
+    <Button onClick={handleLongestPathClick}>chemin le plus long</Button>
+</div>
 
 <div>{
     isShort ? (
@@ -874,15 +827,7 @@ return (
         Réinitialiser les traitements
       </Button>
     </div>
-    <div style={{ margin: "20px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-    <Table
-      dataSource={processingSteps[currentStep]}
-      columns={columns}
-      pagination={false}
-      rowKey="node"
-      style={{ margin: "20px", width: "600px" }}
-    />
-    </div>
+    
     </div>
 
     ) : (
@@ -900,23 +845,64 @@ return (
         Réinitialiser les traitements
       </Button>
     </div>
-    <div style={{ margin: "20px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-    <Table
-      dataSource={processingSteps[currentStep]}
-      columns={columns}
-      pagination={false}
-      rowKey="node"
-      style={{ margin: "20px", width: "600px" }}
-    />
-    </div>
+    
 </div>
     )
     }</div>
     
     
+    <div style={{ margin: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+    <div>
+      <p>Étape 0</p>
+      <table style={{ borderCollapse: 'collapse', border: '1px solid black', marginBottom: '10px' }}>
+        <thead>
+          <tr>
+            <th style={{ border: '1px solid black', padding: '8px' }}>Noeud</th>
+            {initialStep.map(({ node }, index) => (
+              <th key={`th-${index}`} style={{ border: '1px solid black', padding: '8px' }}>{node}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style={{ border: '1px solid black', padding: '8px' }}>Distance</td>
+            {initialStep.map(({ distance }, index) => (
+              <td key={`td-${index}`} style={{ border: '1px solid black', padding: '8px' }}>{distance}</td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-    
-  </div>
+    {processingSteps.map((step, index) => {
+  if (index === 0) return null; // Ignore la première étape
+  return (
+    <div key={`div-${index}`}>
+      <p>Étape {index}</p>
+      <table style={{ borderCollapse: 'collapse', border: '1px solid black', marginBottom: '10px' }}>
+        <thead>
+          <tr>
+            <th style={{ border: '1px solid black', padding: '8px' }}>Noeud</th>
+            {step.map(({ node }, index) => (
+              <th key={`th-${index}`} style={{ border: '1px solid black', padding: '8px' }}>{node}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style={{ border: '1px solid black', padding: '8px' }}>Distance</td>
+            {step.map(({ distance }, index) => (
+              <td key={`td-${index}`} style={{ border: '1px solid black', padding: '8px' }}>{distance === -Infinity ? '-\u221E' : distance}</td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+})}
+
+</div>
+</div>
 );
 }
 
