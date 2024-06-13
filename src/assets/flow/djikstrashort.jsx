@@ -35,6 +35,7 @@ export const findShortestPath = async (nodes, edges, startNode, endNode, setNode
                 console.log("Node to visit: " + neighborNode);
                 console.log("Path distance (alt): " + alt);
                 console.log("Next node distance (distances[neighborNode]): " + distances[neighborNode]);
+                //enleve cette condition fa ça sert a rien 
                 if (alt < distances[neighborNode]) {
                     distances[neighborNode] = alt;
                     prev[neighborNode] = currentNode;
