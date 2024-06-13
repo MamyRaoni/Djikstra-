@@ -1,6 +1,6 @@
-import { PriorityQueueLong } from '../function/priorityQueue';
-import { generateTableStep } from '../function/generatesteps';
-import { highlightNodesAndEdges } from './highlightNodes';
+import { PriorityQueueLong } from './function/priorityQueueLong';
+import { generateTableStep } from './function/generatesteps';
+import { highlightNodesAndEdges } from './function/highlightnodes';
 
 export const findLongestPath = async (nodes, edges, startNode, endNode, setNodes, setEdges, setProcessingSteps) => {
     const distances = {};
