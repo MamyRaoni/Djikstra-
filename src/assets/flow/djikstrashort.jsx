@@ -5,7 +5,7 @@ import { highlightNodesAndEdges } from './function/highlightnodes';
 export const findShortestPath = async (nodes, edges, startNode, endNode, setNodes, setEdges, setProcessingSteps) => {
     const distances = {};
     const prev = {};
-    const pq = new PriorityQueueShort(); // Using a binary heap for the priority queue
+    const pq = new PriorityQueueShort((a, b) => a.distance < b.distance); // Using a binary heap for the priority queue
     const visited = new Set();
     const steps = [generateTableStep(nodes, distances)]; // Add the initial step
 
@@ -18,31 +18,29 @@ export const findShortestPath = async (nodes, edges, startNode, endNode, setNode
     pq.enqueue({ id: startNode, distance: 0 });
 
     while (!pq.isEmpty()) {
-        const { id: currentNode } = pq.dequeue(); // Extract the node with the smallest distance
+        const { id: currentNode, distance: currentDistance } = pq.dequeue(); // Extract the node with the smallest distance
         await highlightNodesAndEdges(currentNode, distances, pq.toArray(), nodes, edges, setNodes, setEdges);
 
-        if (currentNode === endNode && visited==nodes) break;
+        if (currentNode === endNode && visited.size === nodes.length) break;
 
         if (!visited.has(currentNode)) {
             visited.add(currentNode);
-            console.log("Current node: " + currentNode);
             const neighbors = edges.filter((edge) => ((edge.source === currentNode) || (edge.target === currentNode)));
 
             neighbors.forEach((neighbor) => {
                 const weight = parseFloat(neighbor.label);
                 const neighborNode = neighbor.source === currentNode ? neighbor.target : neighbor.source;
-                const alt = distances[currentNode] + weight;
-                console.log("Node to visit: " + neighborNode);
-                console.log("Path distance (alt): " + alt);
-                console.log("Next node distance (distances[neighborNode]): " + distances[neighborNode]);
+                const alt = currentDistance + weight;
                 if (alt < distances[neighborNode]) {
                     distances[neighborNode] = alt;
                     prev[neighborNode] = currentNode;
                     pq.enqueue({ id: neighborNode, distance: alt });
+                    if (pq.has({ id: neighborNode })) {
+                        pq.updatePriority({ id: neighborNode, distance: alt });
+                    }
                 }
             });
-            console.log(prev);
-            steps.push(generateTableStep(nodes, distances)); // Add a new step
+            steps.push(generateTableStep(nodes, distances));
         }
     }
 
@@ -58,9 +56,7 @@ export const findShortestPath = async (nodes, edges, startNode, endNode, setNode
         return path;
     };
 
-    console.log(prev);
     let path = reconstructPath(prev, endNode);
-    console.log(path);
     if (distances[endNode] !== Infinity) {
         path.unshift(startNode);
     }
