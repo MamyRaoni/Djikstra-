@@ -101,4 +101,3 @@ export const findLongestPath = async (nodes, edges, startNode, endNode, setNodes
     setProcessingSteps(steps);
     return path;
 };
-
